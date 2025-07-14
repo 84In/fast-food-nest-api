@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgresdb:
+    image: postgres:16
+    container_name: postgresdb
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fff2025
+      POSTGRES_DB: fast_food_shop
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  pgdata:
