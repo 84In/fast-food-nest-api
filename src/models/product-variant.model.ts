@@ -3,10 +3,13 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Product } from './product.model';
+import { OrderItem } from './order-item.model';
+import { CartItem } from './cart-item.model';
 
 export enum ProductVariantSize {
   SMALL = '15cm',
@@ -54,4 +57,11 @@ export class ProductVariant extends Model<ProductVariant> {
   productId: number;
   @BelongsTo(() => Product)
   product: Product;
+
+  //relationships
+  // Add any relationships here if needed, e.g., associations with other models
+  @HasMany(() => OrderItem)
+  orderItems: OrderItem[]; // Assuming a product variant can be part of multiple order
+  @HasMany(() => CartItem)
+  cartItems: CartItem[];
 }
