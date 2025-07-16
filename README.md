@@ -133,21 +133,26 @@ http://localhost:3000/api
 
 ```
 src/
-├── auth/               # Auth logic (Passport, JWT, guards)
-├── user/               # User module
-├── address/            # Address module
-├── category/           # Category module
-├── product/            # Product and variants
-├── ingredient/         # Topping system
-├── cart/               # Cart logic
-├── order/              # Orders
-├── payment/            # Payment integrations
-├── coupon/             # Discount management
-├── review/             # Product reviews
-├── notification/       # System notifications
-├── dashboard/          # Analytics
-├── common/             # Interceptors, filters, decorators, utils
-└── main.ts             # Application entry point
+├───main.ts                   # Application entry point
+│
+├───config/                   # Global configurations (Sequelize, environment, etc.)
+├───models/                   # Sequelize models and associations
+├───common/                   # Shared utilities: interceptors, filters, pipes, decorators
+│
+└───modules/                  # All business logic modules
+    ├───auth/                 # Authentication (Passport, JWT, Guards)
+    ├───user/                 # User management
+    ├───address/              # User address handling
+    ├───category/             # Product categories
+    ├───product/              # Products and product variants
+    ├───ingredient/           # Toppings or ingredient system
+    ├───cart/                 # Shopping cart logic
+    ├───order/                # Order placement and tracking
+    ├───payment/              # Payment integration (e.g., VNPay)
+    ├───coupon/               # Discount and coupon management
+    ├───review/               # Product reviews and ratings
+    ├───notification/         # System-wide notifications
+    └───dashboard/            # Admin dashboard and analytics
 ```
 
 ---
