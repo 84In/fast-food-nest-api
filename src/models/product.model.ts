@@ -1,12 +1,16 @@
-import { Category } from './category.model';
 import { DataTypes } from 'sequelize';
 import {
   BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
+import { CartItem } from './cart-item.model';
+import { Category } from './category.model';
+import { OrderItem } from './order-item.model';
+import { Review } from './review.model';
 
 @Table
 export class Product extends Model<Product> {
@@ -59,4 +63,11 @@ export class Product extends Model<Product> {
 
   //relationships
   // Add any relationships here if needed, e.g., associations with other models
+  @HasMany(() => OrderItem)
+  orderItems: OrderItem[]; // Assuming a product can be part of multiple order items
+
+  @HasMany(() => CartItem)
+  cartItems: CartItem[]; // Assuming a product can be part of multiple cart items
+  @HasMany(() => Review)
+  reviews: Review[];
 }
