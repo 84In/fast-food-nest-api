@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +11,16 @@ async function bootstrap() {
     `Server started on port: ${configService.get<number>('PORT') || 3000}`,
   );
   const port = configService.get<number>('PORT') || 3000;
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      // transformOptions: { enableImplicitConversion: true }, dont use for production
+    }),
+  );
+
   await app.listen(port);
   // await app.listen(process.env.PORT ?? 3000);
 }
