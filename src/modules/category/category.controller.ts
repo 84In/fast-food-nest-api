@@ -20,7 +20,10 @@ export class CategoryController {
 
   @Get('all')
   async getAllCategories() {
-    return await this.categoryService.findAll();
+    const response = await this.categoryService.findAll();
+    // return { message: 'oke' };
+    // return response;
+    return { message: 'oke', data: response };
   }
 
   @Get('one/:id')
