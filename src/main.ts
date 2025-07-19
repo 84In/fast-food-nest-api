@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,8 @@ async function bootstrap() {
       // transformOptions: { enableImplicitConversion: true }, dont use for production
     }),
   );
+
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(port);
   // await app.listen(process.env.PORT ?? 3000);
