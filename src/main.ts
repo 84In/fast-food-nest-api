@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptors/response.interceptor';
+import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,8 @@ async function bootstrap() {
   );
 
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(port);
   // await app.listen(process.env.PORT ?? 3000);

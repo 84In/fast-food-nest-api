@@ -36,9 +36,11 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<ApiResponse<T>> {
-    // Explicitly type request as Express.Request for type safety
+    const request = context.switchToHttp().getRequest<Request>();
 
-    const request: Request = context.switchToHttp().getRequest<Request>();
+    const startTime = Number(request['startTime']);
+    const endTime = Date.now();
+    const takenTime = `${endTime - startTime}ms`;
 
     return next.handle().pipe(
       map((data: unknown) => {
@@ -63,8 +65,12 @@ export class TransformInterceptor<T>
           success: true,
           message: finalMessage,
           data: responseData,
-          date: new Date(),
+          date: new Date().toLocaleString('vi-VN', {
+            timeZone: 'Asia/Ho_Chi_Minh',
+            hour12: false,
+          }),
           path: request.url,
+          takenTime,
         } as ApiResponse<T>;
       }),
     );
