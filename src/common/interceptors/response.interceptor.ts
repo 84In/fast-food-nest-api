@@ -49,22 +49,22 @@ export class TransformInterceptor<T>
           return data as ApiResponse<T>;
         }
         let finalMessage = this.getDefautlMessage(request.method);
-        let responseData: T | undefined = undefined;
+
         if (data && typeof data === 'object' && 'message' in data) {
-          finalMessage = (data as { message: string }).message;
+          finalMessage = data.message as string;
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { message, ...rest } = data as { [key: string]: unknown };
-          responseData = Object.keys(rest).length > 0 ? (rest as T) : undefined;
+          const { message, ...rest } = data;
+
+          data = Object.keys(rest).length > 0 ? rest : null;
         }
         if (data && typeof data === 'object' && 'data' in data) {
-          responseData = (data as { data: T }).data;
-        } else {
-          responseData = data as T;
+          data = data.data as T;
         }
+
         return {
           success: true,
           message: finalMessage,
-          data: responseData,
+          data,
           date: new Date().toLocaleString('vi-VN', {
             timeZone: 'Asia/Ho_Chi_Minh',
             hour12: false,
