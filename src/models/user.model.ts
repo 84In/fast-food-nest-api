@@ -1,10 +1,18 @@
 import { DataTypes } from 'sequelize';
-import { Column, HasMany, HasOne, Model, Table } from 'sequelize-typescript';
+import {
+  BeforeValidate,
+  Column,
+  HasMany,
+  HasOne,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Address } from './address.model';
 import { Order } from './order.model';
 import { Cart } from './cart.model';
 import { UserCoupon } from './user-coupon.model';
 import { Review } from './review.model';
+import * as bcrypt from 'bcryptjs';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -63,4 +71,25 @@ export class User extends Model<User> {
   coupons: UserCoupon[];
   @HasMany(() => Review)
   reviews: Review[];
+
+  comparePassword(password: string) {
+    const { password: passwordInDb } = this.get({ plain: true });
+    return bcrypt.compareSync(password, passwordInDb);
+  }
+
+  getUserWithoutPassword() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...rest } = this.get({ plain: true });
+    return rest;
+  }
+
+  @BeforeValidate
+  static hashPassword(user: User) {
+    if (user.isNewRecord) {
+      const password = user.get('password');
+      const hashedPassword = bcrypt.hashSync(password, 10);
+
+      user.setDataValue('password', hashedPassword);
+    }
+  }
 }
