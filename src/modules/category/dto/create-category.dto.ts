@@ -1,31 +1,20 @@
-import { Type } from 'class-transformer';
 import {
-  IsBoolean,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+  BooleanNotRequired,
+  NumberNotRequired,
+  StringNotRequired,
+  StringRequired,
+} from '@/common/decorators';
 
 export class CreateCategoryDto {
-  @IsString({ message: 'Tên phải là chuỗi' })
-  @IsNotEmpty({ message: 'Không được bỏ trống' })
+  @StringRequired('Tên danh mục', 'Pizza')
   name: string;
 
-  @IsString({ message: 'Slug phải là chuỗi' })
-  @IsNotEmpty({ message: 'Không được bỏ trống' })
-  slug: string;
-
-  @IsString()
-  @IsOptional()
+  @StringNotRequired('Mô tả danh mục')
   description?: string;
 
-  @IsNumber()
-  @Type(() => Number)
-  @IsOptional()
+  @NumberNotRequired('Ưu tiên sắp xếp')
   sortOrder?: number;
 
-  @IsBoolean()
-  @IsOptional()
+  @BooleanNotRequired('Trạng thái danh mục')
   isActive?: boolean;
 }

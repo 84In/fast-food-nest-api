@@ -1,5 +1,13 @@
+import Helper from '@/utils/helper';
 import { DataTypes } from 'sequelize';
-import { Column, HasMany, Model, Table } from 'sequelize-typescript';
+import {
+  BeforeUpdate,
+  BeforeValidate,
+  Column,
+  HasMany,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Product } from './product.model';
 
 @Table
@@ -34,4 +42,22 @@ export class Category extends Model<Category> {
   // Add any relationships here if needed, e.g., associations with other models
   @HasMany(() => Product)
   products: Product[];
+
+  @BeforeValidate //Gọi trước khi tạo
+  static makeSlug(newCategory: Category) {
+    const name = newCategory.dataValues.name; //có instance khởi tạo nằm trong key dataValues cần trỏ vào mới lấy data được
+    if (newCategory.isNewRecord && name) {
+      const slug = Helper.toSlugFromString(name);
+      newCategory.setDataValue('slug', slug);
+    }
+  }
+
+  @BeforeUpdate
+  static updateSlug(updateCategory: Category) {
+    if (updateCategory.changed('name')) {
+      const name = updateCategory.dataValues.name;
+      const slug = Helper.toSlugFromString(name);
+      updateCategory.setDataValue('slug', slug);
+    }
+  }
 }
