@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Body,
   Controller,
@@ -7,6 +8,8 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,6 +20,7 @@ import {
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { JwtGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('Danh mục')
 @Controller('category')
@@ -40,8 +44,10 @@ export class CategoryController {
     return await this.categoryService.create(createCategoryDto);
   }
 
+  @UseGuards(JwtGuard)
   @Get('all')
-  async getAllCategories() {
+  async getAllCategories(@Req() req: any) {
+    console.log(req.user);
     const response = await this.categoryService.findAll();
     // return { message: 'oke' };
     // return response;

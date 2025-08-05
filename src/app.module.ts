@@ -12,6 +12,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
 import { UserModule } from './modules/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       global: true,
     }),
+    SeedModule,
   ],
   controllers: [],
 })
